@@ -1,0 +1,126 @@
+<div class="focus-mode">
+  <header class="focus-header">
+    <h1>🎯 Focus Mode</h1>
+    <p class="subtitle">Pomodoro Timer for Deep Work</p>
+  </header>
+
+  <!-- Task Selection -->
+  <section class="task-selection">
+    <h2>Select a Task to Focus On</h2>
+    <div class="task-buttons">
+      @for (task of availableTasks(); track task.id) {
+        <button 
+          class="task-btn"
+          [class.selected]="selectedTask()?.id === task.id"
+          (click)="selectTask(task)">
+          <span class="task-priority" [class]="'priority-' + task.priority"></span>
+          <span class="task-title">{{ task.title }}</span>
+          <span class="task-time">{{ task.estimatedTime || 60 }}min</span>
+        </button>
+      }
+    </div>
+    @if (availableTasks().length === 0) {
+      <p class="no-tasks">No active tasks. Create one to get started!</p>
+    }
+  </section>
+
+  <!-- Timer Display -->
+  <section class="timer-section">
+    <div class="timer-display" [class.break-mode]="isBreak()">
+      <div class="timer-label">
+        {{ isBreak() ? '☕ Break Time' : '💪 Work Session' }}
+      </div>
+      <div class="timer-value">{{ getTimeDisplay() }}</div>
+      <div class="progress-ring">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="54" class="progress-background"></circle>
+          <circle 
+            cx="60" 
+            cy="60" 
+            r="54" 
+            class="progress-fill"
+            [style.stroke-dashoffset]="339.29 * (1 - getProgressPercentage() / 100)"></circle>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="timer-controls">
+      @if (!isRunning()) {
+        <button class="btn-play" (click)="startSession()" [disabled]="!selectedTask() && !isRunning()">
+          ▶ Start
+        </button>
+      } @else {
+        <button class="btn-pause" (click)="pauseSession()">
+          ⏸ Pause
+        </button>
+      }
+      @if (timeRemaining() < (isBreak() ? breakDuration() * 60 : workDuration() * 60)) {
+        <button class="btn-resume" (click)="resumeSession()" [hidden]="isRunning()">
+          ▶ Resume
+        </button>
+      }
+      <button class="btn-reset" (click)="resetSession()">
+        ↺ Reset
+      </button>
+    </div>
+
+    <div class="sessions-info">
+      <span>Sessions Completed: <strong>{{ sessionsCompleted() }}</strong></span>
+    </div>
+  </section>
+
+  <!-- Settings -->
+  <section class="settings-section">
+    <div class="setting-group">
+      <h3>Work Duration</h3>
+      <div class="duration-buttons">
+        <button 
+          *ngFor="let min of [15, 20, 25, 30, 45, 60]"
+          [class.active]="workDuration() === min"
+          (click)="changeWorkDuration(min)">
+          {{ min }}m
+        </button>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>Break Duration</h3>
+      <div class="duration-buttons">
+        <button 
+          *ngFor="let min of [5, 10, 15, 20]"
+          [class.active]="breakDuration() === min"
+          (click)="changeBreakDuration(min)">
+          {{ min }}m
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  @if (selectedTask()) {
+    <section class="task-stats">
+      <h3>{{ selectedTask()?.title }}</h3>
+      <div class="stats-grid">
+        <div class="stat">
+          <span class="stat-label">Estimated Time</span>
+          <span class="stat-value">{{ selectedTask()?.estimatedTime || 60 }} min</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Actual Time</span>
+          <span class="stat-value">{{ selectedTask()?.actualTime || 0 }} min</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Priority</span>
+          <span class="stat-value stat-priority" [class]="'priority-' + selectedTask()?.priority">
+            {{ selectedTask()?.priority }}
+          </span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Energy Level</span>
+          <span class="stat-value">{{ selectedTask()?.energyLevel || 'Medium' }}</span>
+        </div>
+      </div>
+    </section>
+  }
+</div>

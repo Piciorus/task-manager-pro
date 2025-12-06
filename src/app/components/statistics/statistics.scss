@@ -1,0 +1,435 @@
+﻿.statistics {
+  width: 100%;
+  padding: var(--spacing-xl);
+  animation: fadeIn var(--transition-base);
+
+  @media (max-width: 768px) {
+    padding: var(--spacing-lg);
+  }
+
+  @media (max-width: 480px) {
+    padding: var(--spacing-md);
+  }
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    background-color: var(--bg-hover);
+  }
+
+  @media (max-width: 480px) {
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+}
+
+.metric-icon {
+  font-size: 2.5rem;
+  min-width: 60px;
+  text-align: center;
+
+  @media (max-width: 480px) {
+    font-size: 2rem;
+    min-width: 50px;
+  }
+}
+
+.metric-content {
+  flex: 1;
+
+  h3 {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0 0 var(--spacing-sm) 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .metric-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  .metric-subtext {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .metric-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--border-color);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .metric-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: var(--radius-full);
+    transition: width 0.5s ease;
+  }
+}
+
+/* Section */
+.section {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+  border: 1px solid var(--border-color);
+
+  @media (max-width: 480px) {
+    padding: var(--spacing-md);
+  }
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin: 0 0 var(--spacing-lg) 0;
+  color: var(--text-primary);
+
+  @media (max-width: 480px) {
+    font-size: 1.25rem;
+  }
+}
+
+/* Weekly Chart */
+.weekly-chart {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--spacing-md);
+  height: 200px;
+
+  @media (max-width: 768px) {
+    height: 150px;
+  }
+
+  @media (max-width: 480px) {
+    gap: var(--spacing-sm);
+  }
+}
+
+.bar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.bar-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bar {
+  width: 100%;
+  min-height: 4px;
+  background: linear-gradient(180deg, var(--primary), var(--secondary));
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(1.2);
+    transform: scaleY(1.1);
+  }
+}
+
+.bar-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.bar-value {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+
+/* Priority Distribution */
+.priority-distribution {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.priority-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.priority-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.priority-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.priority-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+}
+
+.priority-count {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.priority-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.priority-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+/* Categories */
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.category-item {
+  display: grid;
+  grid-template-columns: 150px 1fr 60px;
+  align-items: center;
+  gap: var(--spacing-lg);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 100px 1fr 50px;
+    gap: var(--spacing-md);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 80px 1fr 40px;
+    gap: var(--spacing-sm);
+  }
+}
+
+.category-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.category-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.category-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+.category-count {
+  font-weight: 700;
+  color: var(--primary);
+  text-align: center;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: var(--spacing-lg);
+}
+
+/* Peak Hours Card */
+.peak-hours-card {
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  border: 2px solid var(--primary-light);
+
+  .peak-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .peak-description {
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+/* Trend Card */
+.trend-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--primary);
+
+  &.trend-up {
+    background-color: rgba(16, 185, 129, 0.1);
+    border-left-color: var(--success);
+  }
+
+  &.trend-down {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-left-color: var(--danger);
+  }
+
+  &.trend-stable {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-left-color: var(--info);
+  }
+
+  @media (max-width: 480px) {
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+}
+
+.trend-icon {
+  font-size: 2.5rem;
+  min-width: 60px;
+  text-align: center;
+}
+
+.trend-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Insights Grid */
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-lg);
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.insight-card {
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-base);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  h4 {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0 0 var(--spacing-md) 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .insight-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

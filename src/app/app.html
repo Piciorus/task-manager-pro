@@ -1,0 +1,15 @@
+<div class="app-container">
+  <app-sidebar
+    [isOpen]="isSidebarOpen()"
+    (viewChange)="changeView($event)"
+    (toggleSidebar)="toggleSidebar()"
+  />
+
+  <main class="main-content" [class.sidebar-open]="isSidebarOpen()">
+    <app-dashboard *ngIf="currentView() === 'dashboard'" />
+    <app-calendar-view *ngIf="currentView() === 'calendar'" />
+    <app-time-blocking *ngIf="currentView() === 'time-blocking'" />
+    <app-focus-mode *ngIf="currentView() === 'focus'" />
+    <app-statistics *ngIf="currentView() === 'statistics'" />
+  </main>
+</div>

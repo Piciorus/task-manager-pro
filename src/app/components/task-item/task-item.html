@@ -1,0 +1,39 @@
+<div class="task-item" [class.completed]="task.status === 'completed'">
+  <div class="task-priority" [class]="'priority-' + task.priority"></div>
+
+  <div class="task-checkbox">
+    <button
+      class="checkbox-btn"
+      [class.checked]="task.status === 'completed'"
+      (click)="toggleStatus()"
+    >
+      <span *ngIf="task.status === 'completed'">✓</span>
+    </button>
+  </div>
+
+  <div class="task-content">
+    <h4 class="task-title">{{ task.title }}</h4>
+    <p class="task-description">{{ task.description }}</p>
+
+    <div class="task-meta">
+      <span class="meta-badge category">{{ task.category }}</span>
+      <span class="meta-badge priority-badge priority-{{ task.priority }}">
+        {{ task.priority }}
+      </span>
+      @if (task.energyLevel) {
+        <span class="meta-badge energy-{{ task.energyLevel }}">
+          {{ task.energyLevel }} energy
+        </span>
+      }
+      @if (task.estimatedTime) {
+        <span class="meta-badge">⏱️ {{ task.estimatedTime }}min</span>
+      }
+    </div>
+  </div>
+
+  <div class="task-actions">
+    <button class="action-btn delete-btn" (click)="deleteTask()" title="Delete task">
+      🗑️
+    </button>
+  </div>
+</div>

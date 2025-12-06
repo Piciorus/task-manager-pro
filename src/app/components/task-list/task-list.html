@@ -1,0 +1,15 @@
+<div class="task-list">
+  @if (taskService.activeTasks().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">📝</div>
+      <h3>No tasks yet</h3>
+      <p>Create your first task to get started!</p>
+    </div>
+  } @else {
+    <div class="tasks">
+      @for (task of taskService.activeTasks(); track task.id) {
+        <app-task-item [task]="task" />
+      }
+    </div>
+  }
+</div>

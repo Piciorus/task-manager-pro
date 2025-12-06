@@ -1,0 +1,107 @@
+<div class="time-blocking">
+  <header class="time-blocking-header">
+    <h1>⏰ Time Blocking</h1>
+    <p class="subtitle">Schedule Your Tasks Throughout the Day</p>
+  </header>
+
+  <!-- Date Navigation -->
+  <div class="date-navigation">
+    <button class="btn-nav" (click)="previousDay()">← Previous</button>
+    <div class="date-display">
+      <h2>{{ getDateDisplay() }}</h2>
+      <button class="btn-today" (click)="today()">Today</button>
+    </div>
+    <button class="btn-nav" (click)="nextDay()">Next →</button>
+  </div>
+
+  <div class="time-blocking-container">
+    <!-- Available Tasks (Draggable) -->
+    <aside class="tasks-sidebar">
+      <h3>Available Tasks</h3>
+      <p class="sidebar-hint">Drag tasks to schedule them</p>
+      <div class="available-tasks">
+        @for (task of activeTasks(); track task.id) {
+          <div 
+            class="draggable-task"
+            [style.borderLeftColor]="getTaskColor(task.priority)"
+            draggable="true"
+            (dragstart)="onDragStart(task)">
+            <div class="task-header">
+              <span class="task-priority" [class]="'priority-' + task.priority"></span>
+              <span class="task-name">{{ task.title }}</span>
+            </div>
+            <p class="task-category">{{ task.category }}</p>
+            @if (task.estimatedTime) {
+              <span class="task-duration">{{ task.estimatedTime }}min</span>
+            }
+          </div>
+        }
+        @if (activeTasks().length === 0) {
+          <p class="no-tasks">No active tasks to schedule</p>
+        }
+      </div>
+    </aside>
+
+    <!-- Time Grid -->
+    <main class="time-grid">
+      <div class="grid-header">
+        <div class="time-header"></div>
+      </div>
+      
+      <div class="grid-body">
+        @for (slot of timeSlots(); track slot.hour) {
+          <div 
+            class="time-slot"
+            [class.conflict]="slot.isConflict"
+            (dragover)="onDragOver($event)"
+            (drop)="onDropOnHour(slot.hour)">
+            <div class="time-label">{{ getHourDisplay(slot.hour) }}</div>
+            <div class="slot-content">
+              @for (task of slot.tasks; track task.id) {
+                <div 
+                  class="scheduled-task"
+                  [style.backgroundColor]="getTaskColor(task.priority)">
+                  <div class="scheduled-task-header">
+                    <span class="task-name">{{ task.title }}</span>
+                    @if (task.timeBlocks && task.timeBlocks.length > 0) {
+                      <button 
+                        class="btn-remove"
+                        (click)="removeTimeBlock(task.id, task.timeBlocks[0].id)"
+                        title="Remove this time block">✕</button>
+                    }
+                  </div>
+                </div>
+              }
+              @if (slot.isConflict) {
+                <div class="conflict-warning">⚠️ Schedule Conflict</div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </main>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <h4>Priority Levels</h4>
+    <div class="legend-items">
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #ef4444;"></div>
+        <span>Urgent</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #f97316;"></div>
+        <span>High</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #f59e0b;"></div>
+        <span>Medium</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #10b981;"></div>
+        <span>Low</span>
+      </div>
+    </div>
+  </div>
+</div>

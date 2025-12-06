@@ -1,0 +1,200 @@
+<div class="dashboard">
+  <header class="dashboard-header">
+    <h1>Dashboard</h1>
+    <button class="btn-primary" (click)="toggleAddTask()">
+      <span>+ Add Task</span>
+    </button>
+  </header>
+
+  <!-- Quick Stats Overview -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-content">
+        <h3>{{ stats().totalTasksCompleted }}</h3>
+        <p>Completed Tasks</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-content">
+        <h3>{{ stats().streakDays }}</h3>
+        <p>Day Streak</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <h3>{{ stats().productivityScore }}</h3>
+        <p>Productivity Score</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">⏱️</div>
+      <div class="stat-content">
+        <h3>{{ (stats().totalTimeSpent / 60).toFixed(1) }}h</h3>
+        <p>Time Spent</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-info">
+      <span class="progress-label">Overall Completion</span>
+      <span class="progress-percentage">{{ getCompletionPercentage() }}%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="getCompletionPercentage()"></div>
+    </div>
+  </div>
+
+  <!-- Add Task Modal -->
+  @if (showAddTask()) {
+    <div class="modal-backdrop" (click)="cancelAddTask()"></div>
+    <div class="add-task-modal">
+      <div class="modal-header">
+        <h2>Add New Task</h2>
+        <button class="btn-close" (click)="cancelAddTask()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Task Title *</label>
+          <input 
+            type="text" 
+            [(ngModel)]="newTaskTitle" 
+            placeholder="Enter task title" 
+            class="form-control"
+            (keyup.enter)="addTask()" />
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea 
+            [(ngModel)]="newTaskDescription" 
+            placeholder="Enter task description" 
+            class="form-control" 
+            rows="3"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Priority</label>
+            <select [(ngModel)]="newTaskPriority" class="form-control">
+              <option value="low">🟢 Low</option>
+              <option value="medium">🟡 Medium</option>
+              <option value="high">🟠 High</option>
+              <option value="urgent">🔴 Urgent</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Energy Level</label>
+            <select [(ngModel)]="newTaskEnergyLevel" class="form-control">
+              <option value="low">🔋 Low</option>
+              <option value="medium">⚡ Medium</option>
+              <option value="high">🚀 High</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <input 
+              type="text" 
+              [(ngModel)]="newTaskCategory" 
+              placeholder="e.g., Work, Personal" 
+              class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label>Est. Time (minutes)</label>
+            <input 
+              type="number" 
+              [(ngModel)]="newTaskEstimatedTime" 
+              min="5" 
+              step="5"
+              class="form-control" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Due Date</label>
+          <input 
+            type="date" 
+            [(ngModel)]="newTaskDueDate" 
+            class="form-control" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="cancelAddTask()">Cancel</button>
+        <button class="btn-primary" (click)="addTask()">Add Task</button>
+      </div>
+    </div>
+  }
+
+  <!-- Suggested Tasks Section -->
+  @if (suggestedTasks().length > 0) {
+    <section class="suggested-section">
+      <h2 class="section-title">💡 Suggested Tasks for You</h2>
+      <div class="suggested-tasks">
+        @for (task of suggestedTasks(); track task.id) {
+          <div class="suggested-task-card">
+            <div class="task-priority" [class]="'priority-' + task.priority"></div>
+            <h4>{{ task.title }}</h4>
+            <p>{{ task.description }}</p>
+            <div class="task-meta">
+              <span class="meta-badge">{{ task.category }}</span>
+              <span class="meta-badge energy-{{ task.energyLevel }}">{{ task.energyLevel }} energy</span>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- Filter and Search Section -->
+  <section class="tasks-section">
+    <div class="section-header">
+      <h2 class="section-title">Your Tasks</h2>
+      <div class="filter-controls">
+        <div class="search-box">
+          <input 
+            type="text" 
+            [value]="searchQuery()"
+            (input)="updateSearch($event.target.value)"
+            placeholder="Search tasks..."
+            class="search-input" />
+          @if (searchQuery()) {
+            <button class="btn-clear-search" (click)="clearSearch()" title="Clear search">✕</button>
+          }
+        </div>
+        <div class="filter-buttons">
+          <button 
+            [class.active]="selectedFilter() === 'all'"
+            (click)="setFilter('all')"
+            class="filter-btn">All Tasks</button>
+          <button 
+            [class.active]="selectedFilter() === 'today'"
+            (click)="setFilter('today')"
+            class="filter-btn">Today</button>
+          <button 
+            [class.active]="selectedFilter() === 'overdue'"
+            (click)="setFilter('overdue')"
+            class="filter-btn">Overdue</button>
+          <button 
+            [class.active]="selectedFilter() === 'high-priority'"
+            (click)="setFilter('high-priority')"
+            class="filter-btn">High Priority</button>
+        </div>
+      </div>
+    </div>
+    <app-task-list />
+  </section>
+</div>

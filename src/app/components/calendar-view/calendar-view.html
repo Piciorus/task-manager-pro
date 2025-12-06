@@ -1,0 +1,133 @@
+<div class="calendar-view">
+  <header class="calendar-header">
+    <h1>📆 Calendar</h1>
+    <p class="subtitle">View Your Tasks on a Calendar</p>
+  </header>
+
+  <div class="calendar-container">
+    <!-- Mobile Toggle Button -->
+    <div class="mobile-toggle">
+      <button class="btn-toggle-sidebar" (click)="toggleSidebar()">
+        {{ sidebarOpen() ? '✕ Close Tasks' : '≡ Show Tasks' }}
+      </button>
+    </div>
+    <!-- Calendar Grid -->
+    <section class="calendar-section">
+      <!-- Month Navigation -->
+      <div class="month-navigation">
+        <button class="btn-nav" (click)="previousMonth()">← Previous</button>
+        <h2 class="current-month">{{ getMonthYear() }}</h2>
+        <button class="btn-nav" (click)="nextMonth()">Next →</button>
+      </div>
+
+      <!-- Day Headers -->
+      <div class="day-headers">
+        @for (day of dayNames; track day) {
+          <div class="day-header">{{ day }}</div>
+        }
+      </div>
+
+      <!-- Calendar Days -->
+      <div class="calendar-grid">
+        @for (day of calendarDays(); track day.date.toISOString()) {
+          <div 
+            class="calendar-day"
+            [class.other-month]="!day.isCurrentMonth"
+            [class.today]="day.isToday"
+            [class.selected]="day.isSelected"
+            (click)="selectDate(day.date)">
+            <div class="day-number">{{ getDateDisplay(day.date) }}</div>
+            
+            @if (day.tasks.length > 0) {
+              <div class="day-tasks">
+                @for (task of day.tasks.slice(0, 2); track task.id) {
+                  <div 
+                    class="day-task"
+                    [style.backgroundColor]="getTaskPriorityColor(task.priority)"
+                    [title]="task.title"></div>
+                }
+                @if (day.tasks.length > 2) {
+                  <div class="day-task-more">+{{ day.tasks.length - 2 }}</div>
+                }
+              </div>
+            }
+
+            @if (day.tasks.length > 0) {
+              <div class="day-indicator">{{ getTaskCountDisplay(day.tasks.length) }}</div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Today Button -->
+      <div class="calendar-footer">
+        <button class="btn-today" (click)="today()">Today</button>
+      </div>
+    </section>
+
+    <!-- Tasks for Selected Date -->
+    <aside class="tasks-sidebar" [class.open]="sidebarOpen()">
+      @if (selectedDate()) {
+        <div class="selected-date-header">
+          <h3>Tasks for {{ selectedDate() | date: 'MMMM d, yyyy' }}</h3>
+          <button class="btn-close" (click)="selectedDate.set(null)">✕</button>
+        </div>
+
+        @if (tasksForSelectedDate().length > 0) {
+          <div class="tasks-list">
+            @for (task of tasksForSelectedDate(); track task.id) {
+              <div class="task-card">
+                <div class="task-header">
+                  <div class="task-priority" [class]="'priority-' + task.priority"></div>
+                  <span class="task-title">{{ task.title }}</span>
+                </div>
+                <p class="task-description">{{ task.description }}</p>
+                <div class="task-meta">
+                  <span class="meta-badge">{{ task.category }}</span>
+                  @if (task.status === 'completed') {
+                    <span class="meta-badge completed">✓ Completed</span>
+                  }
+                  @if (task.status === 'in-progress') {
+                    <span class="meta-badge in-progress">In Progress</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="no-tasks">
+            <p>No tasks scheduled for this date</p>
+            <p class="hint">Create a task and set a due date to see it here</p>
+          </div>
+        }
+      } @else {
+        <div class="no-selection">
+          <p>Click on a date to see tasks</p>
+        </div>
+      }
+    </aside>
+  </div>
+
+  <!-- Legend -->
+  <section class="legend">
+    <h3>Legend</h3>
+    <div class="legend-items">
+      <div class="legend-item">
+        <div class="legend-sample today"></div>
+        <span>Today</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-sample selected"></div>
+        <span>Selected</span>
+      </div>
+      <div class="legend-item">
+        <div style="width: 12px; height: 12px; border-radius: 2px; background-color: #ef4444;"></div>
+        <span>Urgent Task</span>
+      </div>
+      <div class="legend-item">
+        <div style="width: 12px; height: 12px; border-radius: 2px; background-color: #f97316;"></div>
+        <span>High Priority</span>
+      </div>
+    </div>
+  </section>
+</div>
