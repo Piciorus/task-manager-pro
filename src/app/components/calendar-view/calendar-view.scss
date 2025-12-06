@@ -52,6 +52,7 @@
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 0;
   }
 }
 
@@ -67,11 +68,11 @@
 }
 
 .mobile-toggle {
-  display: none;
+  display: block;
   margin-bottom: var(--spacing-md);
 
-  @media (max-width: 768px) {
-    display: block;
+  @media (min-width: 769px) {
+    display: none;
   }
 
   .btn-toggle-sidebar {
@@ -314,6 +315,12 @@
     grid-column: 1 / -1;
     max-height: auto;
     display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+    border-radius: 0;
 
     &.open {
       display: flex;

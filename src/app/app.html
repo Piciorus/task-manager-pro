@@ -1,4 +1,14 @@
 <div class="app-container">
+  <!-- Mobile Hamburger Menu -->
+  <div class="mobile-header">
+    <button class="hamburger-menu" (click)="toggleSidebar()" [class.open]="isSidebarOpen()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <h1 class="app-title">Task Manager Pro</h1>
+  </div>
+
   <app-sidebar
     [isOpen]="isSidebarOpen()"
     (viewChange)="changeView($event)"

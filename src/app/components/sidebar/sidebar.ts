@@ -28,6 +28,10 @@ export class SidebarComponent {
   selectView(viewId: 'dashboard' | 'calendar' | 'time-blocking' | 'focus' | 'statistics'): void {
     this.currentView = viewId;
     this.viewChange.emit(viewId);
+    // Auto-close sidebar on mobile after selecting view (with small delay)
+    setTimeout(() => {
+      this.toggleSidebar.emit();
+    }, 100);
   }
 
   onToggleSidebar(): void {

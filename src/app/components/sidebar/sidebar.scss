@@ -8,15 +8,30 @@
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  z-index: var(--z-sticky);
+  z-index: 100;
   transition: transform var(--transition-base);
+  pointer-events: auto;
 
   @media (max-width: 1023px) {
     transform: translateX(-100%);
+    top: 56px;
+    height: calc(100vh - 56px);
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    pointer-events: none;
 
     &.open {
       transform: translateX(0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      pointer-events: auto;
     }
+  }
+
+  @media (min-width: 1024px) {
+    top: 0;
+    height: 100vh;
+    pointer-events: auto;
   }
 }
 
