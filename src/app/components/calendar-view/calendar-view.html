@@ -4,13 +4,14 @@
     <p class="subtitle">View Your Tasks on a Calendar</p>
   </header>
 
+  <!-- Mobile Toggle Button -->
+  <div class="mobile-toggle">
+    <button class="btn-toggle-sidebar" (click)="toggleSidebar()">
+      {{ sidebarOpen() ? '✕ Close Tasks' : '≡ Show Tasks' }}
+    </button>
+  </div>
+
   <div class="calendar-container">
-    <!-- Mobile Toggle Button -->
-    <div class="mobile-toggle">
-      <button class="btn-toggle-sidebar" (click)="toggleSidebar()">
-        {{ sidebarOpen() ? '✕ Close Tasks' : '≡ Show Tasks' }}
-      </button>
-    </div>
     <!-- Calendar Grid -->
     <section class="calendar-section">
       <!-- Month Navigation -->
