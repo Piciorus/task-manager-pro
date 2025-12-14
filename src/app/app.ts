@@ -24,16 +24,29 @@ import { CommonModule } from '@angular/common';
 })
 export class App {
   protected readonly title = signal('Task Manager Pro');
-  isSidebarOpen = signal(true);
+  // Start closed on mobile, open on desktop
+  isSidebarOpen = signal(window.innerWidth >= 1024);
   currentView = signal<'dashboard' | 'calendar' | 'time-blocking' | 'focus' | 'statistics'>('dashboard');
 
-  constructor(public themeService: ThemeService) {}
+  constructor(public themeService: ThemeService) {
+    // Listen to window resize to adjust sidebar visibility
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        // Desktop: always open sidebar
+        this.isSidebarOpen.set(true);
+      }
+    });
+  }
 
   toggleSidebar(): void {
+    console.log('toggleSidebar called, current isSidebarOpen:', this.isSidebarOpen());
     this.isSidebarOpen.set(!this.isSidebarOpen());
+    console.log('isSidebarOpen is now:', this.isSidebarOpen());
   }
 
   changeView(view: 'dashboard' | 'calendar' | 'time-blocking' | 'focus' | 'statistics'): void {
+    console.log('changeView called with:', view);
     this.currentView.set(view);
+    console.log('currentView updated to:', this.currentView());
   }
 }
